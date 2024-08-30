@@ -16,9 +16,7 @@ const BusSearch = () => {
   };
 
   const swapValues = (e) => {
-    let temp = journey.from;
     setJourney((prev) =>({...prev, from: prev.to, to:prev.from}))
-    console.log("value")
   };
   console.log(journey)
 

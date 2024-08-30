@@ -3,6 +3,7 @@ import { FaCircleUser } from "react-icons/fa6";
 import { MdLock ,MdEmail} from "react-icons/md";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
 
@@ -13,6 +14,7 @@ const SignUp = () => {
         name:"",
         email:"",
         password:"",
+        type:"User"
       });
     
       const handelSubmit = async (e) =>{
@@ -28,18 +30,20 @@ const SignUp = () => {
           })
           let data = await res.json();
           if(!res.ok){
-                  console.log("ereor")
-                  return console.log(data)
+                return toast.error(data.message);
             }
             console.log(data);
             setUser({
                 name:"",
                 email:"",
                 password:"",
+                type:"User"
             })
+            toast.success(data.message, {
+                duration: 10000,});
             navigate("/login");
         } catch (error) {
-            console.log(error)
+            toast.error('Error Occured!');
         }
 
     }
@@ -98,7 +102,7 @@ const SignUp = () => {
             </div>
             <div className="flex items-center justify-center">
                 <button className="bg-purple-blue text-white text-xl font-bold py-4 px-7 rounded focus:outline-none focus:shadow-outline" type="submit">
-                    Log In
+                   Create Account
                 </button>
             </div>
             </div>
