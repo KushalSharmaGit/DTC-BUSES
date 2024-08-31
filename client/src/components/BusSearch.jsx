@@ -21,9 +21,8 @@ const BusSearch = () => {
       });
 
       const data = response.data; // Axios automatically parses JSON
-      console.log(data);
 
-      if (!data.success) { // Adjust this based on your response structure
+      if (response.status != 200) { // Adjust this based on your response structure
         return toast.error(data.message);
       }
 
@@ -41,6 +40,7 @@ const BusSearch = () => {
   };
 
   return (
+    <>
     <div className="bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-lg flex-1 flex flex-col items-center gap-8">
       <h1 className='text-xl sm:text-2xl md:text-3xl font-bold text-regal-blue text-center'>
         Enter your origin and destination
@@ -84,6 +84,7 @@ const BusSearch = () => {
         </div>
       </form>
     </div>
+    </>
   );
 }
 
