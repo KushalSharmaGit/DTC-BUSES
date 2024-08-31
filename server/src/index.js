@@ -13,6 +13,10 @@ const { default: mongoose } = require("mongoose");
 const { isAuthenticated } = require("./Middelware/isAuthenticated");
 const { isAdmin} = require("./Middelware/isAdmin");
 
+const {findBusesBetweenStops} =require('./contoller/busController');
+const {uploadData} =require('./utils/ml');
+
+
 // Connecting to the database 
 connectDb();
 // Defining port
@@ -51,6 +55,9 @@ app.use(passport.session());
 
 // Defining the routes
 app.use("/api/user" , require('./routes/userRoutes'));
+app.use('/api/bus', require('./routes/busRoutes.js'))
+
+//uploadData();
 
 
 app.listen(port, () => {

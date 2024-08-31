@@ -22,8 +22,9 @@ const createUser =asyncHandler ( async (req , res) =>{
         password,
         type
     })
-    res.status(201).json(user,{
-        message:"Account Created"
+    res.status(201).json({
+        message: "Account Created",
+        user
     });
 });
 
