@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { FaSearch } from "react-icons/fa";
 import Map from '../assets/Map.png';
+import { useNavigate } from 'react-router-dom';
 
 const BusRoute = () => {
+  const navigate = useNavigate();
   const [route, setRoute] = useState('');
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle search logic here
-    console.log(route)
+    console.log("clicked")
+    navigate('/path-results', { state: route });
+    
   };
 
   return (

@@ -1,48 +1,52 @@
 const asyncHandler = require("express-async-handler");
-const Bus = require('../model/Bus');    
 const Route = require("../model/Route");
 
-const findBusesBetweenStops = asyncHandler( async (req,res) =>{
+const findBusesBetweenStops = asyncHandler(async (req, res) => {
+    const { from, to } = req.query;
+    const availableBuses = [];
 
-        const {from, to} = req.query;
-        const availableBuses = [];
+    const routes = await Route.find();
 
-        const routes = await Route.find();
+    routes.forEach(route => {
+        const fromIndex = route.stops.findIndex(stop => stop.stop_name === from);
+        const toIndex = route.stops.findIndex(stop => stop.stop_name === to);
 
-        routes.forEach(route => {
-            const fromIndex = route.stops.findIndex(stop => stop.stop_name === from);
-            const toIndex = route.stops.findIndex(stop => stop.stop_name === to);
-        
-            if (fromIndex !== -1 && toIndex !== -1 && fromIndex < toIndex) {
-                route.buses.forEach(bus => {
-                    const arrivalTime = route.stops[fromIndex].schedules.find(schedule => schedule.bus === bus)?.arrival_time;
-                    const reachingTime = route.stops[toIndex].schedules.find(schedule => schedule.bus === bus)?.departure_time;
-                    const distance = route.stops[toIndex].schedules.find(schedule => schedule.bus === bus)?.distance - route.stops[fromIndex].schedules.find(schedule => schedule.bus === bus)?.distance;
-        
-                    if (arrivalTime && reachingTime) {
-                        availableBuses.push({
-                            route_name: route.name,
-                            bus_name: bus,
-                            start_stop: from,
-                            end_stop: to,
-                            arrival_time: arrivalTime,
-                            reaching_time: reachingTime,
-                            distance: distance
-                        });
-                    }
-                });
-            }
-        });
-    return res.status(200).json(availableBuses);
+        if (fromIndex !== -1 && toIndex !== -1 && fromIndex < toIndex) {
+            route.buses.forEach(bus => {
+                const arrivalTime = route.stops[fromIndex].schedules.find(schedule => schedule.bus === bus)?.arrival_time;
+                const reachingTime = route.stops[toIndex].schedules.find(schedule => schedule.bus === bus)?.departure_time;
+                const distance = route.stops[toIndex].schedules.find(schedule => schedule.bus === bus)?.distance - route.stops[fromIndex].schedules.find(schedule => schedule.bus === bus)?.distance;
 
-    
+                if (arrivalTime && reachingTime) {
+                    availableBuses.push({
+                        route_name: route.name,
+                        bus_name: bus,
+                        start_stop: from,
+                        end_stop: to,
+                        arrival_time: arrivalTime,
+                        reaching_time: reachingTime,
+                        distance: distance
+                    });
+                }
+            });
+        }
+    });
+
+    if (availableBuses.length === 0) {
+        return res.status(404).json({ message: 'No buses found between the specified stops' });
+    }
+
+    res.status(200).json(availableBuses);
 });
 
-const getDetailedPathBetweenStops = asyncHandler( async (req,res) =>{
+const getDetailedPathBetweenStops = asyncHandler(async (req, res) => {
+    const { name, selectedBus, from, to } = req.query; // Getting the required data
 
-    const {name, selectedBus, from, to} = req.query;   //Getting the required data
+    const route = await Route.findOne({ name });
 
-    const route = await Route.findOne({name});
+    if (!route) {
+        return res.status(404).json({ message: 'Route not found' });
+    }
 
     const detailedPath = [];
     let startCollecting = false;
@@ -71,31 +75,32 @@ const getDetailedPathBetweenStops = asyncHandler( async (req,res) =>{
         }
     }
 
-     return res.status(200).json(detailedPath);
+    if (detailedPath.length === 0) {
+        return res.status(404).json({ message: 'No detailed path found for the selected bus' });
+    }
+
+    res.status(200).json(detailedPath);
 });
 
-const getBuses = async (req, res) => {
-    try {
-        const route = await Route.findOne({ name: req.params.routeName });
-        if (!route) return res.status(404).json({ message: 'Route not found' });
+const getBuses = asyncHandler(async (req, res) => {
+    const routeName = req.query.routeName || req.params.routeName; // Handle both query and URL parameters
+    console.log(routeName)
+    const route = await Route.findOne({ name: routeName });
+    if (!route) return res.status(404).json({ message: 'Route not found' });
 
-        // Extract bus details
-        const buses = route.buses;
-        const busDetails = buses.map(bus => {
-            return {
-                busId: bus,
-                stops: route.stops.map(stop => ({
-                    stopName: stop.stop_name,
-                    schedules: stop.schedules.filter(schedule => schedule.bus === bus)
-                }))
-            };
-        });
+    // Extract bus details
+    const buses = route.buses;
+    const busDetails = buses.map(bus => {
+        return {
+            busId: bus,
+            stops: route.stops.map(stop => ({
+                stopName: stop.stop_name,
+                schedules: stop.schedules.filter(schedule => schedule.bus === bus)
+            }))
+        };
+    });
 
-        res.json(busDetails);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+    res.json(busDetails);
+});
 
-
-module.exports= {findBusesBetweenStops, getDetailedPathBetweenStops, getBuses}
+module.exports = { findBusesBetweenStops, getDetailedPathBetweenStops, getBuses };

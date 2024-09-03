@@ -3,8 +3,7 @@ import { BsSendFill } from "react-icons/bs";
 import { LuArrowUpDown } from "react-icons/lu";
 import { IoLocationSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios correctly
-import toast from 'react-hot-toast';
+
 
 const BusSearch = () => {
   const navigate = useNavigate();

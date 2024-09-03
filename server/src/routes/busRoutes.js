@@ -5,6 +5,5 @@ const {findBusesBetweenStops, getDetailedPathBetweenStops, getBuses} = require('
 
 router.get('/', findBusesBetweenStops)
 router.get('/detail',getDetailedPathBetweenStops)
-router.get('/buses/:routeName', getBuses)
-
+router.get('/buses', getBuses);
 module.exports = router;

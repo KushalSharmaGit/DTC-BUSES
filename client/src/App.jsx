@@ -6,6 +6,7 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import BusResult from './components/BusResult';
 import { AuthProvider } from './utils/AuthContext'; // Ensure this path is correct
+import RouteResults from './components/RouteResults';
 
 function App() {
   const router = createBrowserRouter(
@@ -15,6 +16,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/results' element={<BusResult />} />
+        <Route path='/path-results' element={<RouteResults />} />
         {/* <Route path='/bus-detail' element={<BusDetail />} /> */}
       </Route>
     )
