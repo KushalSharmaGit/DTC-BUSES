@@ -74,5 +74,28 @@ const getDetailedPathBetweenStops = asyncHandler( async (req,res) =>{
      return res.status(200).json(detailedPath);
 });
 
+const getBuses = async (req, res) => {
+    try {
+        const route = await Route.findOne({ name: req.params.routeName });
+        if (!route) return res.status(404).json({ message: 'Route not found' });
 
-module.exports= {findBusesBetweenStops, getDetailedPathBetweenStops}
+        // Extract bus details
+        const buses = route.buses;
+        const busDetails = buses.map(bus => {
+            return {
+                busId: bus,
+                stops: route.stops.map(stop => ({
+                    stopName: stop.stop_name,
+                    schedules: stop.schedules.filter(schedule => schedule.bus === bus)
+                }))
+            };
+        });
+
+        res.json(busDetails);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+module.exports= {findBusesBetweenStops, getDetailedPathBetweenStops, getBuses}

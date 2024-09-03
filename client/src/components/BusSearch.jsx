@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { BsSendFill } from "react-icons/bs";
 import { LuArrowUpDown } from "react-icons/lu";
 import { IoLocationSharp } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios correctly
 import toast from 'react-hot-toast';
 
 const BusSearch = () => {
+  const navigate = useNavigate();
   const [journey, setJourney] = useState({
     from: "",
     to: "",
@@ -13,26 +15,28 @@ const BusSearch = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Pass journey parameters as query parameters
-      const { from, to } = journey;
-      const response = await axios.get('http://localhost:5800/api/bus/', {
-        params: { from, to }
-      });
+    navigate('/results', { state: journey });
+    // try {
+    //   // Pass journey parameters as query parameters
+    //   const { from, to } = journey;
+    //   const response = await axios.get('http://localhost:5800/api/bus/', {
+    //     params: { from, to }
+    //   });
 
-      const data = response.data; // Axios automatically parses JSON
+    //   const data = response.data; // Axios automatically parses JSON
 
-      if (response.status != 200) { // Adjust this based on your response structure
-        return toast.error(data.message);
-      }
+    //   if (response.status != 200) { // Adjust this based on your response structure
+    //     return toast.error(data.message);
+    //   }
 
-      toast.success('Search successful!');
-      // Handle the data as needed
+    //   toast.success('Search successful!');
+    //   // Handle the data as needed
+    //   console.log(data)
 
-    } catch (error) {
-      console.error(error);
-      toast.error('Error Occurred!');
-    }
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error('Error Occurred!');
+    // }
   };
 
   const swapValues = () => {
