@@ -7,7 +7,6 @@ import Navbar from './NavBar';
 const BusResult = () => {
   const [routes, setRoutes] = useState([]);
   const location = useLocation();
-  const navigate = useNavigate();
   const journey = location.state;
 
   useEffect(() => {
@@ -23,6 +22,7 @@ const BusResult = () => {
         });
 
         const data = response.data;
+        console.log(data);
         if (response.status !== 200) {
           return toast.error(data.message);
         }

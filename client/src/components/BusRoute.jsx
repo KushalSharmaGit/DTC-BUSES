@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FaSearch } from "react-icons/fa";
-import Map from '../assets/Map.png';
+// import Map from '../assets/Map.png';
+// import MapRoute from '../assets/MapRoute.png'
+import MapImg from '../assets/MapImg.png'
 import { useNavigate } from 'react-router-dom';
 
 const BusRoute = () => {
@@ -29,7 +31,7 @@ const BusRoute = () => {
         </form>
       </div>
       <div>
-        <img src={Map} alt="Map" className="w-full h-auto rounded-b-xl" />
+        <img src={MapImg} alt="Map" className="w-full h-auto rounded-b-xl" />
       </div>
     </div>
   );
