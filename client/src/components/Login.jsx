@@ -93,10 +93,6 @@ const Login = () => {
                                         Log In
                                     </button>
                                 </div>
-                                 <div>
-                                   <a href='' className="text-2xl font-bold mb-6 text-centre text-regal-blue"> Forgot </a>  
-                                   <label className="text-2xl font-bold mb-6 text-center "> Password </label>
-                                </div>
                             </div>
                         </form>
                     </div>
