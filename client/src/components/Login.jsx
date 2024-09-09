@@ -94,8 +94,8 @@ const Login = () => {
                                     </button>
                                 </div>
                                  <div>
-                                  <label className="text-2xl font-bold mb-6 text-center text-regal-blue"> Already have an account ?</label>
-                                  <a href='' className="text-2xl font-bold mb-6 text-regal-blue"> Signup</a>  
+                                   <a href='' className="text-2xl font-bold mb-6 text-centre text-regal-blue"> Forgot </a>  
+                                   <label className="text-2xl font-bold mb-6 text-center "> Password </label>
                                 </div>
                             </div>
                         </form>
